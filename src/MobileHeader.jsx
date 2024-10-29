@@ -67,7 +67,6 @@ class MobileHeader extends React.Component {
 
   renderLoggedOutItems() {
     const { loggedOutItems } = this.props;
-
     return loggedOutItems.map(({ type, href, content }, i, arr) => (
       <li className="nav-item px-3 my-2" key={`${type}-${content}`}>
         <a
