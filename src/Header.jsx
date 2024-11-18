@@ -3,9 +3,13 @@ import HeaderLogo from "./header-logo";
 import accessibilityIcon from './assets/accessibilityIcon.png';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { AppContext } from '@edx/frontend-platform/react';
+import { getConfig } from '@edx/frontend-platform';
 import $ from 'jquery'; 
 
 class Header extends Component {
+  static contextType = AppContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,15 +22,16 @@ class Header extends Component {
 
   componentDidMount() {
     var darkLang = []
+    const { authenticatedUser } = this.context;
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
-    console.log("LMS URL", process.env.LMS_BASE_URL)
+    console.log("LMS current lang", current_lang)
 
     const jf = document.createElement('script');
-    jf.src = `${process.env.LMS_BASE_URL}/static/js/toolkitjs/vebarl.js`;
+    jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/vebarl.js`;
     // jf.src = `http://local.edly.io:8000/static/js/toolkitjs/vebarl.js`;
     jf.type = 'text/javascript';
     jf.id = 'external_js';
-    jf.setAttribute("lms_base_url", process.env.LMS_BASE_URL+'/')
+    jf.setAttribute("lms_base_url", getConfig().LMS_BASE_URL+'/')
     // jf.setAttribute("lms_base_url", 'http://local.edly.io:8000'+'/')
     const parentDiv = document.getElementById('nett-head');
     const localizeScript = document.createElement('script');
@@ -55,11 +60,13 @@ class Header extends Component {
     const lang_dict = []
 
     
-    axios.get(process.env.LMS_BASE_URL + `/mx-user-info/get_user_profile?email=${Cookies.get("email")}`,).then((res) => {
-      // axios.get(`http://local.edly.io:8000` + `/mx-user-info/get_user_profile?email=${Cookies.get("email")}`,).then((res) => {
+    // axios.get(getConfig().LMS_BASE_URL + `/mx-user-info/get_user_profile?email=${Cookies.get("email")}`,).then((res) => {
+      axios.get(getConfig().LMS_BASE_URL + `/mx-user-info/get_user_profile?email=${authenticatedUser.email}`,).then((res) => {
       document.getElementById("header-username").innerText = res.data.username;
-      document.getElementById("profileimageid").src = process.env.LMS_BASE_URL + res.data.profileImage.medium;
-      document.getElementById("user-profiler-redirect").href = process.env.PROFILE_BASE_URL + res.data.username;
+      document.getElementById("profileimageid").src = getConfig().LMS_BASE_URL + res.data.profileImage.medium;
+      // document.getElementById("user-profiler-redirect").href = process.env.PROFILE_BASE_URL + res.data.username;
+      document.getElementById("user-profiler-redirect").href = getConfig().ACCOUNT_PROFILE_URL + '/u/' +res.data.username;
+      
       const dashboardDiv = document.getElementById('dashboard-navbar');
       if (dashboardDiv && res.data.resume_block) {
           const newDiv = document.createElement('div');
@@ -200,7 +207,7 @@ class Header extends Component {
                         aria-current="page">Explore Courses</a>
                     </li>
                     <li className="nav-item">
-                      <a className={window.location.href.includes('dashboard/programs/') ? 'active tab-nav-link' : 'tab-nav-link'} href={process.env.LMS_BASE_URL + '/dashboard/programs/'} accessKey="s"
+                      <a className={window.location.href.includes('dashboard/programs/') ? 'active tab-nav-link' : 'tab-nav-link'} href={getConfig().LMS_BASE_URL + '/dashboard/programs/'} accessKey="s"
                         aria-current="page">
                         Dashboard
                       </a>
@@ -230,10 +237,11 @@ class Header extends Component {
                   <span className="fa fa-caret-down" aria-hidden="true"></span>
                 </div>
                 <div className="dropdown-user-menu hidden" aria-label="More Options" role="menu" id="user-menu" tabIndex={-1}>
-                  <div className="mobile-nav-item dropdown-item dropdown-nav-item" id="dashboard-navbar"><a href={process.env.LMS_BASE_URL + 'dashboard/programs/'} role="menuitem">Dashboard</a></div>
+                <div className="mobile-nav-item dropdown-item dropdown-nav-item" id="dashboard-navbar"><a href={getConfig().LMS_BASE_URL + 'dashboard/programs/'} role="menuitem">Dashboard</a></div>
                   <div className="mobile-nav-item dropdown-item dropdown-nav-item" ><a id="user-profiler-redirect" href="" role="menuitem">Profile</a></div>
-                  <div className="mobile-nav-item dropdown-item dropdown-nav-item"><a href={process.env.LMS_BASE_URL + '/account/settings'} role="menuitem">Account</a></div>
-                  <div className="mobile-nav-item dropdown-item dropdown-nav-item"><a href={process.env.LMS_BASE_URL + '/logout'} role="menuitem">Sign Out</a></div>
+                  <div className="mobile-nav-item dropdown-item dropdown-nav-item"><a href={getConfig().ACCOUNT_SETTINGS_URL} role="menuitem">Account</a></div>
+                  <div className="mobile-nav-item dropdown-item dropdown-nav-item"><a href={getConfig().LOGOUT_URL} role="menuitem">Sign Out</a></div>
+               
                 </div>
               </div>
             </div>
