@@ -12558,7 +12558,6 @@ body,
     margin-top: 10px;
 }
 
-
 .nav-links .head_menu {
     padding: 0;
 }
@@ -12569,4 +12568,8 @@ body,
 
 .headerSearchForm .form-group {
     display: flex;
+}
+
+#sbar {
+    z-index: unset !important;
 }

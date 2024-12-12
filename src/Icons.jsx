@@ -44,3 +44,21 @@ export const CaretIcon = (props) => (
     />
   </svg>
 );
+
+const CaretDropDownIcon = ({ width = 16, height = 16, fill = 'white' }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 320 512"
+    width={width}
+    height={height}
+    fill={fill}
+    aria-hidden="true"
+  >
+    <path d="M31.2 192h257.6c28.6 0 42.9 34.6 22.6 55L182.6 375c-12.5 12.5-32.7 12.5-45.2 0L8.6 247c-20.3-20.4-6-55 22.6-55z" />
+  </svg>
+);
+
+export default CaretDropDownIcon;
+
+
+

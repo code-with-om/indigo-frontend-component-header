@@ -5,6 +5,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { AppContext } from '@edx/frontend-platform/react';
 import { getConfig } from '@edx/frontend-platform';
+import CaretDropDownIcon from './Icons';
 import $ from 'jquery'; 
 
 class Header extends Component {
@@ -248,7 +249,8 @@ class Header extends Component {
               </div>
               <div className="nav-item hidden-mobile nav-item-dropdown">
                 <div className="toggle-user-dropdown" role="button" aria-label="Options Menu" aria-expanded="false" tabIndex={-1} aria-controls="user-menu">
-                  <span className="fa fa-caret-down" aria-hidden="true"></span>
+                  {/* <span className="fa fa-caret-down" aria-hidden="true"></span> */}
+                  <CaretDropDownIcon/>
                 </div>
                 <div className="dropdown-user-menu hidden" aria-label="More Options" role="menu" id="user-menu" tabIndex={-1}>
                 <div className="mobile-nav-item dropdown-item dropdown-nav-item" id="dashboard-navbar"><a href={getConfig().LMS_BASE_URL + 'dashboard/programs/'} role="menuitem">Dashboard</a></div>
