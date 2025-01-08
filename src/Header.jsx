@@ -16,14 +16,25 @@ class Header extends Component {
     this.state = {
       darkLanguages: [],
       languages: [],
-      lang_key:''
+      lang_key:'',
+      setText: ''
     };
   }
 
+  
 
   componentDidMount() {
     var darkLang = []
     const { authenticatedUser } = this.context;
+
+    if (!authenticatedUser || !authenticatedUser.email) {
+      const loginUrl = getConfig().LOGIN_URL;
+      window.location.href = loginUrl; 
+      return; // Stop further execution
+  }
+
+    const search_query = new URLSearchParams(location.search).get("text");
+    this.setState({ setText: search_query || '' }); // Fallback to an empty string
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
     console.log("LMS current lang", current_lang)
 
@@ -84,12 +95,11 @@ class Header extends Component {
             } else if (e.code == "ml-IN" || e.code == "ml") {
               lang_name = e.name + "(Malayalam)"
             }
-            lang_dict.push({ "name": e.name, "code": e.code })
+            lang_dict.push({ "name": lang_name, "code": e.code })
     
           // console.log("mx language option", lang_dict)
     
           })
-
 
           console.log('Available languages:', data);
         }
@@ -99,6 +109,7 @@ class Header extends Component {
         document.getElementById("header-username").innerText = res.data.username;
         document.getElementById("profileimageid").src = getConfig().LMS_BASE_URL + res.data.profileImage.medium;
         document.getElementById("user-profiler-redirect").href = getConfig().ACCOUNT_PROFILE_URL + '/u/' +res.data.username;
+  
         const dashboardDiv = document.getElementById('dashboard-navbar');
         if (dashboardDiv && res.data.resume_block) {
             const newDiv = document.createElement('div');
@@ -107,9 +118,11 @@ class Header extends Component {
             dashboardDiv.parentNode.insertBefore(newDiv, dashboardDiv);
         };
   
+  
         for (let i = 0; i < res.data.dark_languages.length; i++) {
           var code = res.data.dark_languages[i][0]
           var name = res.data.dark_languages[i][1]
+  
   
           if (code != 'en') {
             if (code == "hi-IN" || code == "hi") {
@@ -134,6 +147,7 @@ class Header extends Component {
         }
         
         this.setState({ languages: lang_dict })
+  
         this.state.languages.map((lang, i) => {
           var option = new Option(lang.name, lang.code)
           selectTag.append(option)
@@ -148,8 +162,11 @@ class Header extends Component {
           }
         }
       })
+
+
       
     };
+    
     
     this.setState({ darkLanguages: darkLang })
     $('#langOptions > option').each(function () {
@@ -159,29 +176,64 @@ class Header extends Component {
         $(this).removeAttr("selected");
       }
     })
+
+    // Hide languages Dropdown on course page 
+    let current_url = window.location.href;
+    if (current_url.includes('learning/course/') ) {
+      $(".myLang").hide();
+    }
+
   }
+
 
   handleLangOptionsClick = (e) => {
     let current_url = window.location.href;
-    let flag = true;
+    let base_url = window.location.origin;
+    let text = "Do you want to change the language? You will be redirected to the 'explore courses' page";
+
+    if (current_url.includes('explore-courses/program-courses') || current_url.includes('explore-courses/#main') || current_url === `${base_url}/explore-courses/` || current_url === `${base_url}/explore-courses` || current_url.includes('explore-courses/search') ) {
+        this.chngLang(e);
+    }
+   
+    else {
+        if (confirm(text) == true) {
+            this.chngLang(e);
+        } else {
+            let prev_lang = localStorage.getItem("lang");
+            $('.myLang').val(prev_lang)
+            return false
+        }
+    }
+  }
+
+  chngLang = (e) => {
+    let current_url = window.location.href;
     var setLang = e.target.value
     localStorage.setItem("langButtonClicked", true);
     localStorage.setItem("lang", e.target.value)
     Cookies.set('lang', setLang, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
 
-    var all_darkLangs_dict = this.state.darkLanguages;
-    if (all_darkLangs_dict.includes(setLang) && setLang != 'en') {
-      if (current_url.includes('/explore-courses/explore-programs') || current_url.includes('/explore-courses/explore-topics/') || current_url.includes('/courses/course-'))
-
-        window.location.href = window.location.origin + '/explore-courses/#main';
-      else
+    if(current_url.includes('/explore-courses/explore-programs') || current_url.includes('/explore-courses/explore-topics/'))
+      {
+          window.location.href = window.location.origin + '/explore-courses/#main';
+      }
+    else {
         window.location.reload()
+      }
 
-    }
 
-    if ((!(all_darkLangs_dict.includes(setLang)) || setLang == 'en')) {
-      window.location.reload()
-    }
+    // if (all_darkLangs_dict.includes(setLang) && setLang != 'en') {
+    //   if (current_url.includes('/explore-courses/explore-programs') || current_url.includes('/explore-courses/explore-topics/') || current_url.includes('/courses/course-'))
+
+    //     window.location.href = window.location.origin + '/explore-courses/#main';
+    //   else
+    //     window.location.reload()
+
+    // }
+
+    // if ((!(all_darkLangs_dict.includes(setLang)) || setLang == 'en')) {
+    //   window.location.reload()
+    // }
 
     Localize.setLanguage(setLang);
     $('#langOptions > option').each(function () {
@@ -198,6 +250,20 @@ class Header extends Component {
 
   }
 
+
+    //Search
+    handleSearchClick = (e) => {
+      e.preventDefault();
+      let searchData =  $('.enter').val();
+      if (searchData != ""){
+        let url =  process.env.EXPLORE_COURSE_URL + `/explore-courses/search?text=${searchData}`;
+        window.location = url;  
+    }
+
+  }
+
+
+
   render() {
     return (<>
       <div className="uai userway_dark" id="userwayAccessibilityIcon" aria-label="accessibility menu" role="button" tabIndex={1} >
@@ -205,7 +271,7 @@ class Header extends Component {
       </div>
       <header className="global-header" id="nett-head">
         <div className="main-header">
-          <HeaderLogo /> 
+           <HeaderLogo /> 
           <div className="hamburger-menu" role="button" aria-label="Options Menu" aria-expanded={false} aria-controls="mobile-menu" tabIndex={0}>
             <span className="line"></span>
             <span className="line"></span>
@@ -229,10 +295,15 @@ class Header extends Component {
                     </li>
                   </ul>
                   <div className="search_box">
-                    <form className='headerSearchForm' onSubmit={(e) => { e.preventDefault() }}>
+                    <form className='headerSearchForm' onSubmit={this.handleSearchClick}>
                       <div className="form-group" role='search'>
-                        <input type="text" id="heardeSearch" name="Search for topic of interest" placeholder="Search for topic of interest" className="enter" onChange={(e) => { }} />
+                        <input type="text" id="heardeSearch" value={this.state.setText} 
+                        onChange={(e) => {
+                          this.setState({ setText: e.target.value }); // Update state correctly
+                        }}
+                        name="Search for topic of interest" placeholder="Search for topic of interest" className="enter" />
                         <input type="submit" value="" className="submit" aria-label="Search" />
+                        
                       </div>
                     </form>
                   </div>
@@ -253,7 +324,7 @@ class Header extends Component {
                   <CaretDropDownIcon/>
                 </div>
                 <div className="dropdown-user-menu hidden" aria-label="More Options" role="menu" id="user-menu" tabIndex={-1}>
-                <div className="mobile-nav-item dropdown-item dropdown-nav-item" id="dashboard-navbar"><a href={getConfig().LMS_BASE_URL + 'dashboard/programs/'} role="menuitem">Dashboard</a></div>
+                  <div className="mobile-nav-item dropdown-item dropdown-nav-item" id="dashboard-navbar"><a href={getConfig().LMS_BASE_URL + '/dashboard/programs/'} role="menuitem">Dashboard</a></div>
                   <div className="mobile-nav-item dropdown-item dropdown-nav-item" ><a id="user-profiler-redirect" href="" role="menuitem">Profile</a></div>
                   <div className="mobile-nav-item dropdown-item dropdown-nav-item"><a href={getConfig().ACCOUNT_SETTINGS_URL} role="menuitem">Account</a></div>
                   <div className="mobile-nav-item dropdown-item dropdown-nav-item"><a href={getConfig().LOGOUT_URL} role="menuitem">Sign Out</a></div>
