@@ -256,7 +256,7 @@ class Header extends Component {
       e.preventDefault();
       let searchData =  $('.enter').val();
       if (searchData != ""){
-        let url =  process.env.EXPLORE_COURSE_URL + `/explore-courses/search?text=${searchData}`;
+        let url =  process.env.EXPLORE_COURSE_URL + `/search?text=${searchData}`;
         window.location = url;  
     }
 
