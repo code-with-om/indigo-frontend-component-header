@@ -40,6 +40,9 @@ class Header extends Component {
 
     const jf = document.createElement('script');
     jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/vebarl.js`;
+    // jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/headertoolkit.js`;
+
+    
     jf.type = 'text/javascript';
     jf.id = 'external_js';
     jf.setAttribute("lms_base_url", getConfig().LMS_BASE_URL+'/')
@@ -65,7 +68,8 @@ class Header extends Component {
     parentDiv.append(langSelect);
     const bodyDiv = document.body;
     bodyDiv.append(localizeScript);
-    langSelect.addEventListener('click', this.handleLangOptionsClick);
+    // langSelect.addEventListener('click', this.handleLangOptionsClick);
+    langSelect.addEventListener('change', this.handleLangOptionsClick);
     let selectTag = document.getElementById("langOptions");
     const lang_dict = []
 
@@ -187,11 +191,26 @@ class Header extends Component {
 
 
   handleLangOptionsClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const selectedLang = e.target.value; // Get the selected language code
+    const currentLang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" });
+
+    // If the selected language is the same as the current language, do nothing
+    if (selectedLang === currentLang) {
+      return;
+    }
+
     let current_url = window.location.href;
     let base_url = window.location.origin;
     let text = "Do you want to change the language? You will be redirected to the 'explore courses' page";
 
-    if (current_url.includes('explore-courses/program-courses') || current_url.includes('explore-courses/#main') || current_url === `${base_url}/explore-courses/` || current_url === `${base_url}/explore-courses` || current_url.includes('explore-courses/search') ) {
+    if (current_url.includes('explore-courses/program-courses') || 
+        current_url.includes('explore-courses/#main') || 
+        current_url === `${base_url}/explore-courses/` || 
+        current_url === `${base_url}/explore-courses` || 
+        current_url.includes('explore-courses/search') ) {
         this.chngLang(e);
     }
    
@@ -199,8 +218,10 @@ class Header extends Component {
         if (confirm(text) == true) {
             this.chngLang(e);
         } else {
-            let prev_lang = localStorage.getItem("lang");
-            $('.myLang').val(prev_lang)
+            // let prev_lang = localStorage.getItem("lang");
+            // $('.myLang').val(prev_lang)
+            const langSelect = document.getElementById('langOptions');
+            langSelect.value = currentLang;
             return false
         }
     }
