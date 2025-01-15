@@ -39,9 +39,7 @@ class Header extends Component {
     console.log("LMS current lang", current_lang)
 
     const jf = document.createElement('script');
-    jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/vebarl.js`;
-    // jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/headertoolkit.js`;
-
+    // jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/vebarl.js`;
     
     jf.type = 'text/javascript';
     jf.id = 'external_js';
