@@ -10,7 +10,6 @@ import $ from 'jquery';
 
 class Header extends Component {
   static contextType = AppContext;
-
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +19,6 @@ class Header extends Component {
       setText: ''
     };
   }
-
   
 
   componentDidMount() {
@@ -36,10 +34,32 @@ class Header extends Component {
     const search_query = new URLSearchParams(location.search).get("text");
     this.setState({ setText: search_query || '' }); // Fallback to an empty string
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
-    console.log("LMS current lang", current_lang)
-
     const jf = document.createElement('script');
-    // jf.src = `${getConfig().LMS_BASE_URL}/static/js/toolkitjs/vebarl.js`;
+
+    const script = document.createElement('script');
+    script.id = 'oada_ma_toolbar_script';
+    script.async = true;
+    script.type = 'text/javascript';
+    script.setAttribute('crossorigin', 'anonymous');
+    // Define the license key and URL
+    const oadaLicenseKey = getConfig().MAX_TOOLBAR_KEY;
+    const oadaLicenseUrl = "https://api.maxaccess.io/scripts/toolbar/";
+    // Create the inline script content
+    script.innerHTML = `
+      var oada_ma_license_key="${oadaLicenseKey}";
+      var oada_ma_license_url="${oadaLicenseUrl}";
+      (function(s,o,g){
+        a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];
+        a.src=g;
+        a.setAttribute("async","");
+        a.setAttribute("type","text/javascript");
+        a.setAttribute("crossorigin","anonymous");
+        m.parentNode.insertBefore(a,m);
+      })(document,"script",oada_ma_license_url+oada_ma_license_key);
+    `;
+    // Append the script to the body
+    document.body.appendChild(script);
     
     jf.type = 'text/javascript';
     jf.id = 'external_js';
@@ -99,7 +119,6 @@ class Header extends Component {
             }
             lang_dict.push({ "name": lang_name, "code": e.code })
     
-          // console.log("mx language option", lang_dict)
     
           })
 
@@ -120,11 +139,9 @@ class Header extends Component {
             dashboardDiv.parentNode.insertBefore(newDiv, dashboardDiv);
         };
   
-  
         for (let i = 0; i < res.data.dark_languages.length; i++) {
           var code = res.data.dark_languages[i][0]
           var name = res.data.dark_languages[i][1]
-  
   
           if (code != 'en') {
             if (code == "hi-IN" || code == "hi") {
@@ -164,7 +181,6 @@ class Header extends Component {
           }
         }
       })
-
 
       
     };
@@ -285,9 +301,9 @@ class Header extends Component {
 
   render() {
     return (<>
-      <div className="uai userway_dark" id="userwayAccessibilityIcon" aria-label="accessibility menu" role="button" tabIndex={1} >
+      {/* <div className="uai userway_dark" id="userwayAccessibilityIcon" aria-label="accessibility menu" role="button" tabIndex={1} >
         <img alt="Accessibility Widget" src={accessibilityIcon} className="ui_w" width="35" height="35" />
-      </div>
+      </div> */}
       <header className="global-header" id="nett-head">
         <div className="main-header">
            <HeaderLogo /> 
