@@ -10,6 +10,7 @@ import $ from 'jquery';
 
 class Header extends Component {
   static contextType = AppContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +20,7 @@ class Header extends Component {
       setText: ''
     };
   }
+
   
 
   componentDidMount() {
@@ -36,29 +38,12 @@ class Header extends Component {
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
     const jf = document.createElement('script');
 
+
     const script = document.createElement('script');
-    script.id = 'oada_ma_toolbar_script';
+    const user_way_key = getConfig().USER_WAY_KEY;
+    script.src = 'https://cdn.userway.org/widget.js';
+    script.setAttribute('data-account', user_way_key);
     script.async = true;
-    script.type = 'text/javascript';
-    script.setAttribute('crossorigin', 'anonymous');
-    // Define the license key and URL
-    const oadaLicenseKey = getConfig().MAX_TOOLBAR_KEY;
-    const oadaLicenseUrl = "https://api.maxaccess.io/scripts/toolbar/";
-    // Create the inline script content
-    script.innerHTML = `
-      var oada_ma_license_key="${oadaLicenseKey}";
-      var oada_ma_license_url="${oadaLicenseUrl}";
-      (function(s,o,g){
-        a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];
-        a.src=g;
-        a.setAttribute("async","");
-        a.setAttribute("type","text/javascript");
-        a.setAttribute("crossorigin","anonymous");
-        m.parentNode.insertBefore(a,m);
-      })(document,"script",oada_ma_license_url+oada_ma_license_key);
-    `;
-    // Append the script to the body
     document.body.appendChild(script);
     
     jf.type = 'text/javascript';
@@ -86,7 +71,6 @@ class Header extends Component {
     parentDiv.append(langSelect);
     const bodyDiv = document.body;
     bodyDiv.append(localizeScript);
-    // langSelect.addEventListener('click', this.handleLangOptionsClick);
     langSelect.addEventListener('change', this.handleLangOptionsClick);
     let selectTag = document.getElementById("langOptions");
     const lang_dict = []
@@ -119,7 +103,6 @@ class Header extends Component {
             }
             lang_dict.push({ "name": lang_name, "code": e.code })
     
-    
           })
 
           console.log('Available languages:', data);
@@ -139,9 +122,11 @@ class Header extends Component {
             dashboardDiv.parentNode.insertBefore(newDiv, dashboardDiv);
         };
   
+  
         for (let i = 0; i < res.data.dark_languages.length; i++) {
           var code = res.data.dark_languages[i][0]
           var name = res.data.dark_languages[i][1]
+  
   
           if (code != 'en') {
             if (code == "hi-IN" || code == "hi") {
@@ -158,6 +143,9 @@ class Header extends Component {
               name = name + "(Odia)"
             } else if (code == "ml-IN" || code == "ml") {
               name = name + "(Malayalam)"
+            }
+            else if (code == "gu") {
+              name = name + "(Gujrati)"
             }
   
             darkLang.push(code)
@@ -181,6 +169,7 @@ class Header extends Component {
           }
         }
       })
+
 
       
     };
@@ -374,5 +363,6 @@ class Header extends Component {
     );
   }
 }
+
 
 export default Header;
