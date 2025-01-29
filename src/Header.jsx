@@ -20,7 +20,6 @@ class Header extends Component {
       setText: ''
     };
   }
-
   
 
   componentDidMount() {
@@ -38,14 +37,14 @@ class Header extends Component {
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
     const jf = document.createElement('script');
 
-
     const script = document.createElement('script');
     const user_way_key = getConfig().USER_WAY_KEY;
     script.src = 'https://cdn.userway.org/widget.js';
     script.setAttribute('data-account', user_way_key);
     script.async = true;
     document.body.appendChild(script);
-    
+
+
     jf.type = 'text/javascript';
     jf.id = 'external_js';
     jf.setAttribute("lms_base_url", getConfig().LMS_BASE_URL+'/')
@@ -170,7 +169,6 @@ class Header extends Component {
         }
       })
 
-
       
     };
     
@@ -188,6 +186,15 @@ class Header extends Component {
     let current_url = window.location.href;
     if (current_url.includes('learning/course/') ) {
       $(".myLang").hide();
+
+      //  LTS WAT Code START : DO NOT REMOVE or MODIFY 
+      //  Create and append the LTS script
+      const ltsScript = document.createElement('script');
+      ltsScript.src = `https://lts.lb.gcloud.letstalksign.org/script/lts-load-lms-V1-OB.js?auth_api=${getConfig().LMS_BASE_URL}/letstalksign/authenticate`;
+      ltsScript.async = true;
+      document.body.appendChild(ltsScript);
+      //  LTS WAT Code END : DO NOT REMOVE or MODIFY 
+    
     }
 
   }
@@ -363,6 +370,5 @@ class Header extends Component {
     );
   }
 }
-
 
 export default Header;
