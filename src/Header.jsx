@@ -37,13 +37,15 @@ class Header extends Component {
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
     const jf = document.createElement('script');
 
-    const script = document.createElement('script');
-    const user_way_key = getConfig().USER_WAY_KEY;
-    script.src = 'https://cdn.userway.org/widget.js';
-    script.setAttribute('data-account', user_way_key);
-    script.async = true;
-    document.body.appendChild(script);
-
+    const show_user_way = getConfig().SHOW_USER_WAY;
+    if(show_user_way == "True"){
+      const script = document.createElement('script');
+      const user_way_key = getConfig().USER_WAY_KEY;
+      script.src = 'https://cdn.userway.org/widget.js';
+      script.setAttribute('data-account', user_way_key);
+      script.async = true;
+      document.body.appendChild(script);
+    }
 
     jf.type = 'text/javascript';
     jf.id = 'external_js';
@@ -195,6 +197,16 @@ class Header extends Component {
       document.body.appendChild(ltsScript);
       //  LTS WAT Code END : DO NOT REMOVE or MODIFY 
     
+    }
+
+    if (document.readyState === 'complete') {
+      console.log('DOM and all resources have fully loaded');
+    } else if (document.readyState === 'interactive') {
+        console.log('DOM fully loaded and parsed, but resources may still be loading');
+
+    } else {
+        console.log('DOM is still loading');
+
     }
 
   }
