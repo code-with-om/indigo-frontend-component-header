@@ -15,6 +15,7 @@ $white: #fff;
 @import 'font-awesome/css/font-awesome.min.css';
 
 
+
 text-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -803,13 +804,13 @@ li {
     font-size: 14px;
 }
 
-.search_box {
+.search_box1 {
     float: right;
     margin-right: 26px;
     margin-top: 10px;
 }
 
-.search_box .form-group {
+.search_box1 .form-group {
     margin-bottom: 0px;
 }
 
@@ -916,6 +917,7 @@ li {
     color: #fff;
     cursor: pointer;
     font-size: 16px;
+    font-family: 'Segoe UI' !important;
 }
 
 .head_menu .menu_list .nav-item.active {
@@ -993,8 +995,8 @@ li {
 }
 
 #nett-head .nav-links .secondary .user_custom_login:focus,
-.search_box .form-group:focus,
-.search_box .form-group:focus-within {
+.search_box1 .form-group:focus,
+.search_box1 .form-group:focus-within {
     outline: 1px auto;
 }
 
@@ -1005,6 +1007,7 @@ li {
     overflow: hidden;
     white-space: nowrap;
     color: #fff;
+    font-family: 'Segoe UI' !important;
 }
 
 #nett-head .nav-links .secondary .dropdown-user-menu .dropdown-item:hover {
@@ -1316,6 +1319,7 @@ li {
     width: 100%;
     display: inline-block;
     color: #fff;
+    font-family: 'Segoe UI' !important;
 }
 
 #nett-head .nav-links .secondary .user-image-frame {
@@ -2645,7 +2649,7 @@ body.view-in-course .wrapper-footer {
         margin-top: 0 !important;
     }
 
-    .global-header .main-header .search_box {
+    .global-header .main-header .search_box1 {
         float: none;
         margin-right: 0;
         margin-top: 3px;
@@ -3132,6 +3136,7 @@ body.view-in-course .wrapper-footer {
     box-shadow: none !important;
     outline: none;
     font-weight: normal;
+    font-family: 'Segoe UI' !important;
 }
 
 .enter[type="text"]::placeholder {
@@ -3347,7 +3352,7 @@ body.view-in-course .wrapper-footer {
     margin-top: 0 !important;
 }
 
-.global-header .main-header .search_box {
+.global-header .main-header .search_box1 {
     float: none;
     // margin-right: 0;
     // margin-top: 3px;
@@ -3355,7 +3360,7 @@ body.view-in-course .wrapper-footer {
     // width: 88%;
 }
 
-.global-header .main-header .search_box{
+.global-header .main-header .search_box1{
     margin-bottom: 0px;
     margin-top: 0px;
 }
@@ -12564,7 +12569,7 @@ body,
     }
 }
 
-.search_box {
+.search_box1 {
     float: right;
     margin-right: 80px;
     margin-top: 10px;
@@ -12586,3 +12591,4 @@ body,
 #sbar {
     z-index: unset !important;
 }
+

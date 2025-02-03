@@ -337,7 +337,7 @@ class Header extends Component {
                       </a>
                     </li>
                   </ul>
-                  <div className="search_box">
+                  <div className="search_box1">
                     <form className='headerSearchForm' onSubmit={this.handleSearchClick}>
                       <div className="form-group" role='search'>
                         <input type="text" id="heardeSearch" value={this.state.setText} 
