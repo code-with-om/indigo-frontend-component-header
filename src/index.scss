@@ -755,7 +755,7 @@ li {
 /*------header-start------*/
 #nett-head {
     background: #011530;
-    padding: 6px 15px 5px;
+    padding: 10px 15px 5px;
     display: block;
     width: 100%;
     box-shadow: 0px 0px 5px rgb(0 0 0 / 35%);
@@ -913,7 +913,7 @@ li {
 }
 
 .head_menu .menu_list .tab-nav-link {
-    padding: 10px;
+    padding: 7px 10px 7px 10px;
     color: #fff;
     cursor: pointer;
     font-size: 16px;
@@ -998,6 +998,11 @@ li {
 .search_box1 .form-group:focus,
 .search_box1 .form-group:focus-within {
     outline: 1px auto;
+}
+
+.nav-item-dropdown .toggle-user-dropdown svg{
+    margin-bottom: 3px;
+    margin-right: 7px;
 }
 
 .username {
@@ -3136,7 +3141,7 @@ body.view-in-course .wrapper-footer {
     box-shadow: none !important;
     outline: none;
     font-weight: normal;
-    font-family: 'Segoe UI' !important;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .enter[type="text"]::placeholder {
@@ -3354,15 +3359,11 @@ body.view-in-course .wrapper-footer {
 
 .global-header .main-header .search_box1 {
     float: none;
-    // margin-right: 0;
-    // margin-top: 3px;
-    // margin-bottom: 10px;
-    // width: 88%;
 }
 
 .global-header .main-header .search_box1{
     margin-bottom: 0px;
-    margin-top: 0px;
+    // margin-top: 0px;
 }
 
 // .enter[type="text"] {
@@ -3384,10 +3385,15 @@ body.view-in-course .wrapper-footer {
     bottom: -9px;
 }
 
+
 .logo {
     height: 40px !important;
 }
 
+.head_menu .menu_list .nav-item:last-child {
+    margin-right: 0px;
+    margin-left: 31px;
+}
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700");
 
 [tabindex="-1"] {
@@ -12591,4 +12597,5 @@ body,
 #sbar {
     z-index: unset !important;
 }
+
 
