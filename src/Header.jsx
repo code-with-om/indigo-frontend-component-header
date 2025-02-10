@@ -36,7 +36,7 @@ class Header extends Component {
     this.setState({ setText: search_query || '' }); // Fallback to an empty string
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
     const jf = document.createElement('script');
-
+    const mx_localizekey = getConfig().MX_LOCALIZEKEY;
     const show_user_way = getConfig().SHOW_USER_WAY;
     if(show_user_way == "True"){
       const script = document.createElement('script');
@@ -60,7 +60,7 @@ class Header extends Component {
     const localizeInnerText = document.createElement("script");
     localizeInnerText.innerText = !function (a) { if (!a.Localize) { a.Localize = {}; for (var e = ["translate", "untranslate", "phrase", "initialize", "translatePage", "setLanguage", "getLanguage", "getSourceLanguage", "detectLanguage", "getAvailableLanguages", "untranslatePage", "bootstrap", "prefetch", "on", "off", "hideWidget", "showWidget"], t = 0; t < e.length; t++)a.Localize[e[t]] = function () { } } }(window);
     const localizeKey = document.createElement("script");
-    localizeKey.innerText = Localize.initialize({ key: 'zKxxnKn5hZxwu', rememberLanguage: true, });
+    localizeKey.innerText = Localize.initialize({ key: mx_localizekey, rememberLanguage: true, });
     const langSelect = document.createElement("select");
     langSelect.id = "langOptions";
     langSelect.className = "myLang";
@@ -77,7 +77,7 @@ class Header extends Component {
     const lang_dict = []
 
     localizeScript.onload = () => {
-      Localize.initialize({ key: 'zKxxnKn5hZxwu', rememberLanguage: true });
+      Localize.initialize({ key: mx_localizekey, rememberLanguage: true });
       
       Localize.getAvailableLanguages((error, data) => {
         if (error) {
