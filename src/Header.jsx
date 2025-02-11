@@ -164,6 +164,7 @@ class Header extends Component {
         for (let i = 0; i < options.length; i++) {
           if (current_lang == options[i].value) {
             options[i].setAttribute("selected", true)
+            Localize.setLanguage(current_lang);
           }
           else{
             options[i].removeAttribute("selected", true)
