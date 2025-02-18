@@ -35,6 +35,9 @@ class Header extends Component {
     const search_query = new URLSearchParams(location.search).get("text");
     this.setState({ setText: search_query || '' }); // Fallback to an empty string
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+    if (!current_lang) { // Check for undefined, null, or empty string
+      current_lang = 'en';
+    }
     const jf = document.createElement('script');
     const mx_localizekey = getConfig().MX_LOCALIZEKEY;
     const show_user_way = getConfig().SHOW_USER_WAY;
@@ -237,18 +240,83 @@ class Header extends Component {
         this.chngLang(e);
     }
    
+    // else {
+    //     if (confirm(text) == true) {
+    //         this.chngLang(e);
+    //     } 
+    //     else {
+    //         const langSelect = document.getElementById('langOptions');
+    //         langSelect.value = currentLang;
+    //         return false
+    //     }
+    // }
+
     else {
-        if (confirm(text) == true) {
-            this.chngLang(e);
-        } else {
-            // let prev_lang = localStorage.getItem("lang");
-            // $('.myLang').val(prev_lang)
-            const langSelect = document.getElementById('langOptions');
-            langSelect.value = currentLang;
-            return false
-        }
-    }
+      // Use a custom confirmation dialog
+      this.showCustomConfirmDialog(text, () => {
+          this.chngLang(e);
+      }, () => {
+          const langSelect = document.getElementById('langOptions');
+          langSelect.value = currentLang;
+      });
   }
+  }
+
+
+    // Custom confirmation dialog
+    showCustomConfirmDialog = (message, onConfirm, onCancel) => {
+      // Create dialog elements
+      const modal = document.createElement('div');
+      modal.setAttribute('id', 'customConfirmModal');
+      modal.setAttribute('tabindex', '-1');
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100%';
+      modal.style.height = '100%';
+      modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      modal.style.display = 'flex';
+      modal.style.justifyContent = 'center';
+      modal.style.alignItems = 'center';
+      modal.style.zIndex = '1000';
+  
+      const dialog = document.createElement('div');
+      dialog.style.backgroundColor = '#fff';
+      dialog.style.padding = '20px';
+      dialog.style.borderRadius = '8px';
+      dialog.style.textAlign = 'center';
+      dialog.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+  
+      const messageElem = document.createElement('p');
+      messageElem.textContent = message;
+      messageElem.setAttribute('tabindex', '0'); // Make it focusable
+  
+      const confirmButton = document.createElement('button');
+      confirmButton.textContent = 'Confirm';
+      confirmButton.style.margin = '0 10px';
+      confirmButton.onclick = () => {
+          document.body.removeChild(modal);
+          onConfirm();
+      };
+  
+      const cancelButton = document.createElement('button');
+      cancelButton.textContent = 'Cancel';
+      cancelButton.style.margin = '0 10px';
+      cancelButton.onclick = () => {
+          document.body.removeChild(modal);
+          onCancel();
+      };
+  
+      // Append elements
+      dialog.appendChild(messageElem);
+      dialog.appendChild(confirmButton);
+      dialog.appendChild(cancelButton);
+      modal.appendChild(dialog);
+      document.body.appendChild(modal);
+  
+      // Focus on the message element
+      messageElem.focus();
+  };
 
   chngLang = (e) => {
     let current_url = window.location.href;
