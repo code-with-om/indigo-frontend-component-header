@@ -172,6 +172,7 @@ class Header extends Component {
           if (current_lang == options[i].value) {
             options[i].setAttribute("selected", true)
             Localize.setLanguage(current_lang);
+            Cookies.set('lang', current_lang, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
           }
           else{
             options[i].removeAttribute("selected", true)
