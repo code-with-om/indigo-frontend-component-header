@@ -44,6 +44,7 @@ class Header extends Component {
     const mx_localizekey = getConfig().MX_LOCALIZEKEY;
 
     const show_user_way = getConfig().SHOW_USER_WAY;
+    console.log("show userway", show_user_way)
     if(show_user_way == "True"){
       const script = document.createElement('script');
       const user_way_key = getConfig().USER_WAY_KEY;
@@ -173,6 +174,7 @@ class Header extends Component {
             options[i].setAttribute("selected", true)
             Localize.setLanguage(current_lang);
             Cookies.set('lang', current_lang, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+
           }
           else{
             options[i].removeAttribute("selected", true)

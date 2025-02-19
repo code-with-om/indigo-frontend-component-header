@@ -653,9 +653,9 @@ nav.breadcrumb [aria-current="page"] {
 }
 
 /*------sub_box-end------*/
-.edxlogo {
-    text-align: right;
-}
+// .edxlogo {
+//     text-align: right;
+// }
 
 .edxlogo a {
     display: inline-block;
@@ -2086,7 +2086,7 @@ nav.breadcrumb {
 .elektrobit-logo p {
     font-size: 14px;
     margin-top: 10px;
-    margin-right: -29px;
+    // margin-right: -29px;
 }
 
 .elektrobit-logo {
@@ -12379,7 +12379,7 @@ body,
         background-color: #fff;
         color: #313131;
         right: 30px;
-        top: 83px;
+        top: 55px;
         z-index: 10
     }
 
@@ -12632,9 +12632,7 @@ body,
     display: none !important;
 }
 
-
 #customConfirmModal button{
     border: none;
 }
-
 
