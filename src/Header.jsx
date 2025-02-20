@@ -32,10 +32,11 @@ class Header extends Component {
       window.location.href = loginUrl; 
       return; // Stop further execution
   }
+  console.log("site domain", getConfig().SITE_DOMAIN,getConfig().EXPLORE_COURSE_URL )
 
     const search_query = new URLSearchParams(location.search).get("text");
     this.setState({ setText: search_query || '' }); // Fallback to an empty string
-    var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+    var current_lang = Cookies.get('lang', { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
     if (!current_lang) { // Check for undefined, null, or empty string
       current_lang = 'en';
     }
@@ -44,7 +45,6 @@ class Header extends Component {
     const mx_localizekey = getConfig().MX_LOCALIZEKEY;
 
     const show_user_way = getConfig().SHOW_USER_WAY;
-    console.log("show userway", show_user_way)
     if(show_user_way == "True"){
       const script = document.createElement('script');
       const user_way_key = getConfig().USER_WAY_KEY;
@@ -173,7 +173,7 @@ class Header extends Component {
           if (current_lang == options[i].value) {
             options[i].setAttribute("selected", true)
             Localize.setLanguage(current_lang);
-            Cookies.set('lang', current_lang, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+            Cookies.set('lang', current_lang, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
 
           }
           else{
@@ -228,7 +228,7 @@ class Header extends Component {
     e.stopPropagation();
 
     const selectedLang = e.target.value; // Get the selected language code
-    const currentLang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" });
+    const currentLang = Cookies.get('lang', { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" });
 
     // If the selected language is the same as the current language, do nothing
     if (selectedLang === currentLang) {
@@ -369,7 +369,7 @@ class Header extends Component {
     var setLang = e.target.value
     localStorage.setItem("langButtonClicked", true);
     localStorage.setItem("lang", e.target.value)
-    Cookies.set('lang', setLang, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+    Cookies.set('lang', setLang, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
 
     if(current_url.includes('/explore-courses/explore-programs') || current_url.includes('/explore-courses/explore-topics/'))
       {
@@ -414,7 +414,7 @@ class Header extends Component {
       e.preventDefault();
       let searchData =  $('.enter').val();
       if (searchData != ""){
-        let url =  process.env.EXPLORE_COURSE_URL + `/search?text=${searchData}`;
+        let url =  getConfig().EXPLORE_COURSE_URL[0] + `/search?text=${searchData}`;
         window.location = url;  
     }
 
